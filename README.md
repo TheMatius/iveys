@@ -5,19 +5,19 @@
 
 ## [POST] api/v1/oferta
 ### Body:
-uuid: String,
-addressDestination: String,
-addressOrigin: String,
-cityCode: String,
-latitudeOrigin: String,
-longitudeOrigin: String,
-pointReferenceDestination: String,
-pointReferenceOrigin: String,
-serviceType: String,
-observations: String,
-guardian: String
+- uuid: String,
+- addressDestination: String,
+- addressOrigin: String,
+- cityCode: String,
+- latitudeOrigin: String,
+- longitudeOrigin: String,
+- pointReferenceDestination: String,
+- pointReferenceOrigin: String,
+- serviceType: String,
+- observations: String,
+- guardian: String
 
 ## [POST] api/v1/usuario
-user: String, -> Número de celular
-name: String,
-availability: Boolean
+- user: String, -> Número de celular
+- name: String,
+- availability: Boolean
