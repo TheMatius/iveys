@@ -2,9 +2,9 @@ import twilio from 'twilio';
 
 import { getAvialibleUsers } from "../models/user";
 
-const accountSid = 'ACe4bd00f4356988ead9cce06af745c1d6'; 
-const authToken = '7ea93559200a3f8089b18bce3bcf1104';
-const messagingServiceSid = 'MG5856cb490f824316b18e6a9f2fbd960c';
+const accountSid = process.env.TWILIO_ACCOUNT_SID; 
+const authToken = process.env.TWILIO_API_KEY;
+const messagingServiceSid = process.env.TWILIO_MESSAGE_SID;
 const client = new twilio(accountSid, authToken);
 
 export const requestOffer = async (addressDestination) => {
