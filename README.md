@@ -3,8 +3,7 @@
 
 # Endpoints
 
-## [POST] api/v1/oferta
-### Body:
+#### [POST] api/v1/oferta
 - uuid: String,
 - addressDestination: String,
 - addressOrigin: String,
@@ -17,7 +16,7 @@
 - observations: String,
 - guardian: String
 
-## [POST] api/v1/usuario
+#### [POST] api/v1/usuario
 - user: String, -> Número de celular
 - name: String,
 - availability: Boolean
