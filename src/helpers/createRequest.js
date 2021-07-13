@@ -16,19 +16,19 @@ export const requestOffer = async (addressDestination) => {
       throw new Error('No hay usuarios disponibles');
     }
 
-    vonage.message.sendSms('Iveys-Test', '573137247868', 'It Works!', (err, res) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log('here', res);
-      if(res.messages[0]['status'] === "0") {
-        console.log("Message sent successfully.");
-      } else {
-          console.log(`Message failed with error: ${res.messages[0]['error-text']}`);
-      }
-    });
-    console.log(users);
+    // vonage.message.sendSms('Iveys-Test', '573137247868', 'It Works!', (err, res) => {
+    //   if (err) {
+    //     console.log(err);
+    //     return;
+    //   }
+    //   console.log('here', res);
+    //   if(res.messages[0]['status'] === "0") {
+    //     console.log("Message sent successfully.");
+    //   } else {
+    //       console.log(`Message failed with error: ${res.messages[0]['error-text']}`);
+    //   }
+    // });
+    // console.log(users);
 
     users.forEach((user) => {
       const payload = {
