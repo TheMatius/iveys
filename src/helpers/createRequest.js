@@ -1,12 +1,11 @@
-// import axios from 'axios';
-import Vonage from '@vonage/server-sdk';
+import twilio from 'twilio';
 
 import { getAvialibleUsers } from "../models/user";
 
-const vonage = new Vonage({
-  apiKey: process.env.VONAGE_API_KEY,
-  apiSecret: process.env.VONAGE_API_SECRET
-});
+const accountSid = 'ACe4bd00f4356988ead9cce06af745c1d6'; 
+const authToken = '7ea93559200a3f8089b18bce3bcf1104';
+const messagingServiceSid = 'MG5856cb490f824316b18e6a9f2fbd960c';
+const client = new twilio(accountSid, authToken);
 
 export const requestOffer = async (addressDestination) => {
   try {
@@ -16,40 +15,16 @@ export const requestOffer = async (addressDestination) => {
       throw new Error('No hay usuarios disponibles');
     }
 
-    // vonage.message.sendSms('Iveys-Test', '573137247868', 'It Works!', (err, res) => {
-    //   if (err) {
-    //     console.log(err);
-    //     return;
-    //   }
-    //   console.log('here', res);
-    //   if(res.messages[0]['status'] === "0") {
-    //     console.log("Message sent successfully.");
-    //   } else {
-    //       console.log(`Message failed with error: ${res.messages[0]['error-text']}`);
-    //   }
-    // });
-    // console.log(users);
+    const usersSMS = users.map(async (user) => {
+      const to = user.user;
+      const body = `${user.name} tienes una solicitud en ${addressDestination}.`;
 
-    users.forEach((user) => {
-      const payload = {
-        from: 'Iveys-Test',
-        to: user.user,
-        msg: `${user.name} tienes una solicitud en ${addressDestination} `,
-      };
-
-      vonage.message.sendSms(payload.from, payload.to, payload.msg, (err, res) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        if(res.messages[0]['status'] === "0") {
-          console.log("Message sent successfully.");
-        } else {
-            console.log(`Message failed with error: ${res.messages[0]['error-text']}`);
-        }
-      });
-      
+      return await client.messages.create({ body, to, messagingServiceSid });
     });
+
+    Promise.allSettled(usersSMS)
+      .then((res) => console.log('Messages sended!'))
+      .catch((err) => console.log(err));
   } catch (err) {
     throw err;    
   }
