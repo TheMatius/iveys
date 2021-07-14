@@ -35,7 +35,18 @@ export const create = async (req, res, next) => {
       guardian: guardian || ""
     }
     const addedOffer = await add(offer);
-    requestOffer(addressDestination);
+    const usersSended = await requestOffer(addressDestination);
+    const errorUsers = usersSended
+      .filter((user) => user.status !== 200)
+      .map((user) => ({ ...user.data }));
+
+    if (errorUsers.length > 0) {
+      return res.status(401).json({
+        ok: false,
+        error: 'No puedo enviar el mensaje a los usuarios',
+        errorUsers
+      });
+    }
 
     res.json({ addedOffer });
   } catch (err) {

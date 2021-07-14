@@ -1,11 +1,14 @@
-import twilio from 'twilio';
+import axios from 'axios';
 
 import { getAvialibleUsers } from "../models/user";
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID; 
-const authToken = process.env.TWILIO_API_KEY;
-const messagingServiceSid = process.env.TWILIO_MESSAGE_SID;
-const client = new twilio(accountSid, authToken);
+const API_URL = 'https://api.production.twnel.com/messages';
+const config = {
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${process.env.TWNEL_API_KEY}`
+  }
+};
 
 export const requestOffer = async (addressDestination) => {
   try {
@@ -18,13 +21,15 @@ export const requestOffer = async (addressDestination) => {
     const usersSMS = users.map(async (user) => {
       const to = user.user;
       const body = `${user.name} tienes una solicitud en ${addressDestination}.`;
-
-      return await client.messages.create({ body, to, messagingServiceSid });
+      return await axios.post(API_URL, { to, body }, config);
     });
 
-    Promise.allSettled(usersSMS)
-      .then((res) => console.log('Messages sended!'))
+    const usersSended = await Promise.allSettled(usersSMS)
+      .then((res) => res.map((user) => {
+        return { status: user.value.status, data: JSON.parse(user.value.config.data) };
+      }))
       .catch((err) => console.log(err));
+    return usersSended;
   } catch (err) {
     throw err;    
   }
